@@ -1,11 +1,11 @@
-// SettingsScreen.tsx
+// ProfileScreen.tsx
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const SettingsScreen = () => {
+const ProfileScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings Screen</Text>
+      <Text style={styles.title}>Profile</Text>
     </View>
   );
 };
@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor:"#f0ead0",
     alignItems: 'center',
-    backgroundColor:"#89c7d9",
   },
   title: {
     fontSize: 24,
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingsScreen;
+export default ProfileScreen;

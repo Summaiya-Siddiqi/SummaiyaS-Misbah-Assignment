@@ -8,14 +8,14 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       <View style={styles.buttonContainer}>
         <Button
           title="Go to Profile"
-          color="#9987d9"
+          color="#c7edd4"
           onPress={() => navigation.navigate('Profile')}
         />
       </View>
       <View style={styles.buttonContainer}>
         <Button
           title="Go to Settings"
-          color="#9987d9"
+          color="#c7edd4"
           onPress={() => navigation.navigate('Settings')}
         />
       </View>
@@ -26,13 +26,13 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor:"#f0ead0",
     alignItems: 'center',
-    backgroundColor:"#89c7d9",
+    justifyContent: 'center',
     
   },
   buttonContainer: {
-    marginBottom: 20, // Space between buttons
+    marginBottom: 20, 
   },
 });
 

@@ -9,17 +9,14 @@ import React from 'react';
 import { StyleSheet, Text, View, Alert, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './HomeScreen';
-import ProfileScreen from './ProfileScreen';
-import SettingsScreen from './SettingsScreen';
+import HomeScreen from './src/components/HomeScreen';
+import ProfileScreen from './src/components/ProfileScreen';
+import SettingsScreen from './src/components/SettingsScreen';
 
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  // const showAlert = () => {
-  //   Alert.alert("Hello Summaiya Siddiqi");
-//};
 
   return (
     <NavigationContainer>
