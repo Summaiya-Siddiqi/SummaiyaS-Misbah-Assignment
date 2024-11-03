@@ -7,16 +7,31 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <Button
-          title="Go to Profile"
+          title="Profile"
           color="#9987d9"
           onPress={() => navigation.navigate('Profile')}
         />
       </View>
       <View style={styles.buttonContainer}>
         <Button
-          title="Go to Settings"
+          title="Settings"
           color="#9987d9"
           onPress={() => navigation.navigate('Settings')}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Userlist"
+          color="#9987d9"
+          onPress={() => navigation.navigate('Userlist')}
+        />
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          title="ReduxCounter"
+          color="#9987d9"
+          onPress={() => navigation.navigate('Counter')}
         />
       </View>
     </View>
