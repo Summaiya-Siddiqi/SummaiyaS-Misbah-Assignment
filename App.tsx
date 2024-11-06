@@ -10,9 +10,9 @@ import { StyleSheet, Text, View, Alert, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './HomeScreen';
-import ProfileScreen from './Screen/ProfileScreen';
-import SettingsScreen from './Screen/SettingsScreen';
-import UserlistScreen from './Screen/UserlistScreen';
+import ProfileScreen from './components/Screen/ProfileScreen';
+import SettingsScreen from './components/Screen/SettingsScreen';
+import UserlistScreen from './components/Screen/UserlistScreen';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import ReduxCounter from './components/ReduxCounter';
@@ -21,9 +21,6 @@ import ReduxCounter from './components/ReduxCounter';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  // const showAlert = () => {
-  //   Alert.alert("Hello Summaiya Siddiqi");
-//};
 
   return (
     <Provider store={store}>
@@ -32,37 +29,13 @@ const App = () => {
       <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: 'Settings' }} />
-      <Stack.Screen name="Userlist" component={UserlistScreen} options={{ title: 'Userlist' }} />
+      <Stack.Screen name="Userlist" component={UserlistScreen} options={{ title: 'Users List' }} />
       <Stack.Screen name="Counter" component={ReduxCounter} options={{ title: 'Redux Counter' }} />
 
     </Stack.Navigator>
   </NavigationContainer>
   </Provider>
-    
-    // <View style={styles.container}>
-    //   <TouchableOpacity style={styles.button} onPress={showAlert}>
-    //     <Text style={styles.buttonText}>Notify Me</Text>
-    //   </TouchableOpacity>
-    // </View>
-  
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#f8f8f8',
-//   },
-//   button: {
-//     padding: 15,
-//     backgroundColor: '#982fb3',
-//     borderRadius: 5,
-//   },
-//   buttonText: {
-//     color: '#fff',
-//     fontSize: 16,
-//   },
-// });
 export default App;

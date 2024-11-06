@@ -7,7 +7,7 @@ import { increment, decrement } from '../redux/counterSlice';
 
 const ReduxCounter = () => {
   const dispatch = useDispatch();
-  const count = useSelector((state: any) => state.counter.count); // Access count from state
+  const count = useSelector((state: any) => state.counter.count); 
 
   return (
     <View style={styles.container}>
@@ -27,13 +27,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   counterText: {
-    fontSize: 32,
-    marginBottom: 20,
+    fontSize: 35,
+    marginBottom: 25,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '60%',
+    width: '50%',
   },
 });
 
