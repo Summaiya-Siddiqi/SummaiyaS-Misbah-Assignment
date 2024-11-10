@@ -1,12 +1,26 @@
 // ProfileScreen.tsx
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 
-const ProfileScreen = () => {
+const ProfileScreen= ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
-    </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Login"
+          color="#9987d9"
+          onPress={() => navigation.navigate('LoginScreen')}
+        />
+        </View>
+
+        <View style={styles.buttonContainer}>
+        <Button
+          title="SignUp"
+          color="#9987d9"
+          onPress={() => navigation.navigate('SignupScreen')}
+        />
+        </View>
+        </View>
   );
 };
 
@@ -16,11 +30,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor:"#89c7d9",
+    
   },
-  title: {
-    fontSize: 24,
-    color:"black"
+  buttonContainer: {
+    marginBottom: 20, 
   },
 });
+
 
 export default ProfileScreen;
