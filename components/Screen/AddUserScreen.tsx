@@ -13,7 +13,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
   const handleSignOut = async () => {
     try {
       await auth().signOut();
-      Alert.alert('Signed out successfully');
+      Alert.alert('Log out successfully');
       navigation.navigate('LoginScreen');
     } catch (error: any) {
       Alert.alert('Error', error.message);
@@ -31,8 +31,8 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
         username,
         email,
         name,
-        companyName: companyName || '',
-        phoneNumber: phoneNumber || '',
+        companyName: companyName ,
+        phoneNumber: phoneNumber ,
       });
       Alert.alert('Success', 'User added successfully');
       setUsername('');
@@ -47,7 +47,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Add New User</Text>
+      <Text style={styles.title}>Add User</Text>
 
       <TextInput
         placeholder="Username"
@@ -86,11 +86,11 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
         style={styles.input}
       />
 
-      <Button title="Add User" onPress={handleAddUser} color="#4CAF50" />
+      <Button title="Add User" onPress={handleAddUser} color="#8fce00" />
 
       <View style={styles.navigationContainer}>
         <Button
-          title="Go to Existing Users"
+          title="Go to Users"
           onPress={() => navigation.navigate('UserScreen')} 
           color="#2196F3"
         />

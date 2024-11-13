@@ -8,29 +8,29 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       <View style={styles.buttonContainer}>
         <Button
           title="Profile"
-          color="#9987d9"
+          color="#2986cc"
           onPress={() => navigation.navigate('Profile')}
         />
       </View>
       <View style={styles.buttonContainer}>
         <Button
           title="Settings"
-          color="#9987d9"
+          color="#2986cc"
           onPress={() => navigation.navigate('Settings')}
         />
       </View>
       <View style={styles.buttonContainer}>
         <Button
-          title="Userlist"
-          color="#9987d9"
+          title="Users list"
+          color="#2986cc"
           onPress={() => navigation.navigate('Userlist')}
         />
       </View>
 
       <View style={styles.buttonContainer}>
         <Button
-          title="ReduxCounter"
-          color="#9987d9"
+          title="Redux Counter"
+          color="#2986cc"
           onPress={() => navigation.navigate('Counter')}
         />
       </View>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:"#89c7d9",
+    backgroundColor:"#fff2cc",
     
   },
   buttonContainer: {

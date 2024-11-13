@@ -15,7 +15,7 @@ const ProfileScreen= ({ navigation }: { navigation: any }) => {
 
         <View style={styles.buttonContainer}>
         <Button
-          title="SignUp"
+          title="Sign-up"
           color="#9987d9"
           onPress={() => navigation.navigate('SignupScreen')}
         />
