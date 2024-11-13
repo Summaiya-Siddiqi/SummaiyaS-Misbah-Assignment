@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-
 
 interface User {
   username: string;
   email: string;
   name: string;
   companyName?: string; 
-  phoneNumber?: string; 
+  phoneNumber?: string;
+  latitude?: number;
+  longitude?: number;
+  imageUrl?: string;  // Add image URL for the user profile picture
 }
 
 const UserScreen = () => {
-  
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const unsubscribe = firestore()
       .collection('Users')
       .onSnapshot(snapshot => {
-        
         const userList: User[] = snapshot.docs.map(doc => doc.data() as User);
         setUsers(userList); 
       });
@@ -40,7 +40,22 @@ const UserScreen = () => {
             <Text style={styles.email}>{item.email}</Text>
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.company}>{item.companyName}</Text>
-             <Text style={styles.phoneNumber}>{item.phoneNumber}</Text>
+            <Text style={styles.phoneNumber}>{item.phoneNumber}</Text>
+
+            {item.imageUrl ? (
+              <Image source={{ uri: item.imageUrl }} style={styles.profileImage} />
+            ) : (
+              <Text style={styles.noImageText}>No Image Available</Text>
+            )}
+
+            {item.latitude && item.longitude ? (
+              <View style={styles.locationContainer}>
+                <Text style={styles.locationText}>Latitude: {item.latitude}</Text>
+                <Text style={styles.locationText}>Longitude: {item.longitude}</Text>
+              </View>
+            ) : (
+              <Text style={styles.noLocationText}>Location not available</Text>
+            )}
           </View>
         )}
       />
@@ -97,7 +112,36 @@ const styles = StyleSheet.create({
     color: '#1446A0',
     marginTop: 5,
   },
- 
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  noImageText: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#666',
+    marginTop: 5,
+  },
+  locationContainer: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
+  },
+  locationText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  noLocationText: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#888',
+    marginTop: 5,
+  },
 });
 
 export default UserScreen;
