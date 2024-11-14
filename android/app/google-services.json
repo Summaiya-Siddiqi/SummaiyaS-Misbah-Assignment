@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "561123356089",
+    "project_id": "fir-auth-3c5f8",
+    "storage_bucket": "fir-auth-3c5f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561123356089:android:16e34a91ba285d6ac61a68",
+        "android_client_info": {
+          "package_name": "com.summaiya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561123356089-92cdv659ont6cgq8httds9e2363n1578.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.summaiya",
+            "certificate_hash": "9943fd427bc5632bace2678a259bb06cb42a2092"
+          }
+        },
+        {
+          "client_id": "561123356089-fss0c3igr5lo6ejb6s3828e4u9i88feq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8GaLTvKo595f_NHuZ-AnG770ZJ1KQgSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561123356089-fss0c3igr5lo6ejb6s3828e4u9i88feq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
