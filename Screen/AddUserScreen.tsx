@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 import Geolocation from '@react-native-community/geolocation';
+import RNFS from 'react-native-fs';
 
 const AddUserScreen = ({ navigation }: { navigation: any }) => {
     const [username, setUsername] = useState('');
@@ -99,12 +100,14 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
         if (cameraRef.current) {
             try {
                 const photoData = await cameraRef.current.takePhoto();
-                setPhoto(photoData.path);  // Store the photo URI or base64 string
+                setPhoto(photoData.path); 
+
             } catch (error) {
                 console.error('Error capturing photo:', error);
             }
         }
     };
+    
 
     // Function to add user data to Firestore
     const handleAddUser = async () => {
@@ -114,7 +117,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
         }
 
         try {
-            // Store the user data in Firestore, including the image URI and location
+            // Store the user data in Firestore
             await firestore().collection('Users').add({
                 username,
                 email,
@@ -123,7 +126,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
                 phoneNumber: phoneNumber || '',
                 latitude: location.latitude,
                 longitude: location.longitude,
-                photoUri: photo,  // Save the full image URI directly in the Firestore collection
+                photoUri: photo,  
             });
 
             Alert.alert('Success', 'User added successfully');
@@ -133,7 +136,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
             setCompanyName('');
             setPhoneNumber('');
             setLocation(null);
-            setPhoto(null);  // Reset the photo after successful submission
+            setPhoto(null);  
         } catch (error: any) {
             Alert.alert('Error', error.message);
         }
