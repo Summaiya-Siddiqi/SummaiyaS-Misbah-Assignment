@@ -34,6 +34,26 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           onPress={() => navigation.navigate('Counter')}
         />
       </View>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Login"
+          color="#9987d9"
+          onPress={() => navigation.navigate('LoginScreen')}
+        />
+        </View>
+
+        <View style={styles.buttonContainer}>
+        <Button
+          title="SignUp"
+          color="#9987d9"
+          onPress={() => navigation.navigate('SignupScreen')}
+        />
+        </View>
+
+
+
+
     </View>
   );
 };
@@ -47,6 +67,7 @@ const styles = StyleSheet.create({
     
   },
   buttonContainer: {
+    width:300,
     marginBottom: 20, // Space between buttons
   },
 });

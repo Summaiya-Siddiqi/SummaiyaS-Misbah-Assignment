@@ -10,20 +10,31 @@ interface User {
   phoneNumber?: string;
   latitude?: number;
   longitude?: number;
-  imageUrl?: string;  // Add image URL for the user profile picture
+  photoUri?: string;  // Add image URL for the user profile picture
 }
 
 const UserScreen = () => {
   const [users, setUsers] = useState<User[]>([]);
 
+  // const unsub = async () =>{
+  //   await firestore()
+  //   .collection('Users')
+    
+  //   .onSnapshot(snapshot => {
+  //     const userList: User[] = snapshot.docs.map(doc => doc.data() as User);
+  //     setUsers(userList); 
+  //     console.log("Userlist "+userList);
+  //   });
+  // }
   useEffect(() => {
     const unsubscribe = firestore()
       .collection('Users')
+      
       .onSnapshot(snapshot => {
         const userList: User[] = snapshot.docs.map(doc => doc.data() as User);
         setUsers(userList); 
+        console.log("Userlist "+userList);
       });
-
     return () => unsubscribe(); 
   }, []);
 
@@ -42,8 +53,8 @@ const UserScreen = () => {
             <Text style={styles.company}>{item.companyName}</Text>
             <Text style={styles.phoneNumber}>{item.phoneNumber}</Text>
 
-            {item.imageUrl ? (
-              <Image source={{ uri: item.imageUrl }} style={styles.profileImage} />
+            {item.photoUri ? (
+              <Image source={{ uri: item.photoUri }} style={styles.profileImage} />
             ) : (
               <Text style={styles.noImageText}>No Image Available</Text>
             )}
@@ -113,9 +124,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 300,
+    height: 200,
+    borderRadius: 10,
     marginTop: 10,
     marginBottom: 10,
     alignSelf: 'center',

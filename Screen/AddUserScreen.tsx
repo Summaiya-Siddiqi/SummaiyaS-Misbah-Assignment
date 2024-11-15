@@ -15,6 +15,8 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [location, setLocation] = useState<any>(null);
     const [photo, setPhoto] = useState<string | null>(null);  // State for the photo URI
+    const [photoBase64, setPhotoBase64] = useState<string | null>(null);
+    const [filePath, setFilePath] = useState(null);
 
     // Request Notification permission and FCM token
     useEffect(() => {
@@ -100,21 +102,35 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
         if (cameraRef.current) {
             try {
                 const photoData = await cameraRef.current.takePhoto();
-                setPhoto(photoData.path); 
+                //setPhoto(photoData.path); 
+                const filePath = `file://${photoData.path}`; // Ensure correct URI format
+
+                // Check if file exists
+                const fileExists = await RNFS.exists(filePath);
+                if (!fileExists) {
+                    console.error('Photo file does not exist:', filePath);
+                } else {
+                    console.log('Photo captured at:', filePath);
+                    setPhoto(filePath); 
+                }
+                const base64 = await RNFS.readFile(photoData.path, 'base64');
+                //console.log({base64})
+                setPhotoBase64(base64); 
 
             } catch (error) {
                 console.error('Error capturing photo:', error);
             }
         }
     };
-    
+
 
     // Function to add user data to Firestore
     const handleAddUser = async () => {
-        if (!username || !email || !name || !location || !photo) {
+        if (!username || !email || !name || !photo) {
             Alert.alert('Error', 'Please fill out the required fields and capture an image!');
             return;
         }
+        console.log('Pressed Button')
 
         try {
             // Store the user data in Firestore
@@ -124,9 +140,9 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
                 name,
                 companyName: companyName || '',
                 phoneNumber: phoneNumber || '',
-                latitude: location.latitude,
-                longitude: location.longitude,
-                photoUri: photo,  
+                latitude: location.latitude || '',
+                longitude: location.longitude || '',
+                photoUri: photo,
             });
 
             Alert.alert('Success', 'User added successfully');
@@ -136,7 +152,8 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
             setCompanyName('');
             setPhoneNumber('');
             setLocation(null);
-            setPhoto(null);  
+            setPhoto(filePath);
+            //setPhotoBase64(photoBase64);
         } catch (error: any) {
             Alert.alert('Error', error.message);
         }
@@ -148,6 +165,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
 
             <TextInput
                 placeholder="Username"
+                placeholderTextColor="#888"
                 value={username}
                 onChangeText={setUsername}
                 style={styles.input}
@@ -155,6 +173,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
 
             <TextInput
                 placeholder="Email"
+                placeholderTextColor="#888"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -163,6 +182,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
 
             <TextInput
                 placeholder="Name"
+                placeholderTextColor="#888"
                 value={name}
                 onChangeText={setName}
                 style={styles.input}
@@ -170,6 +190,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
 
             <TextInput
                 placeholder="Company Name (optional)"
+                placeholderTextColor="#888"
                 value={companyName}
                 onChangeText={setCompanyName}
                 style={styles.input}
@@ -177,6 +198,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
 
             <TextInput
                 placeholder="Phone Number (optional)"
+                placeholderTextColor="#888"
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
                 keyboardType="phone-pad"
@@ -193,26 +215,31 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
                     photo={true}
                 />
 
-                {/* Capture button */}
                 <Button title="Capture Image" onPress={captureImage} />
 
-                {/* Display the captured image */}
-                {photo && <Image source={{ uri: photo }} style={styles.capturedImage} />}
+
+                {photo && (
+                    <Image
+                        source={{ uri: photo }}
+                        style={{ width: 200, height: 200, marginTop: 10 }}
+                    />
+
+                )}
             </View>
 
-            <View style={styles.locationContainer}>
+            <View style={styles.navigationContainer}>
                 <Button title="Add User" onPress={handleAddUser} color="#4CAF50" />
             </View>
 
             {/* Display Location Data */}
-            {location ? (
+            {/*location ? (
                 <View style={styles.locationContainer}>
                     <Text style={styles.locationText}>Latitude: {location.latitude}</Text>
                     <Text style={styles.locationText}>Longitude: {location.longitude}</Text>
                 </View>
             ) : (
                 <Text style={styles.locationText}>Location not available</Text>
-            )}
+            )*/}
 
             <View style={styles.navigationContainer}>
                 <Button
@@ -223,7 +250,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
             </View>
 
             <View style={styles.signOutContainer}>
-                <Button title="Sign Out" onPress={handleSignOut} color="red" />
+                <Button title="Sign Out" onPress={handleSignOut} color="" />
             </View>
         </ScrollView>
     );
@@ -251,6 +278,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         backgroundColor: '#fff',
         fontSize: 16,
+        color: 'black',
     },
     capturedImage: {
         width: 300,
