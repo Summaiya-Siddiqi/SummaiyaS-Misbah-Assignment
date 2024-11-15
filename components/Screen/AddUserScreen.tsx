@@ -16,6 +16,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
     const [location, setLocation] = useState<any>(null);
     const [photo, setPhoto] = useState<string | null>(null);  // State for the photo URI
     const [photoBase64, setPhotoBase64] = useState(null);
+    const [filePath, setFilePath] = useState(null);
 
     // Request Notification permission and FCM token
     useEffect(() => {
@@ -151,7 +152,7 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
             setCompanyName('');
             setPhoneNumber('');
             setLocation(null);
-            setPhoto(null);  
+            setPhoto(filePath);  
             //setPhotoBase64(photoBase64);
         } catch (error: any) {
             Alert.alert('Error', error.message);

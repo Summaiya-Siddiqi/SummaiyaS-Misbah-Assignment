@@ -25,10 +25,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    color:'black'
   },
   counterText: {
     fontSize: 32,
     marginBottom: 20,
+    color:'black'
   },
   buttonContainer: {
     flexDirection: 'row',

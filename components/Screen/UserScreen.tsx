@@ -10,7 +10,7 @@ interface User {
   phoneNumber?: string;
   latitude?: number;
   longitude?: number;
-  imageUrl?: string;  // Add image URL for the user profile picture
+  photoUri?: string;  // Add image URL for the user profile picture
 }
 
 const UserScreen = () => {
@@ -22,6 +22,8 @@ const UserScreen = () => {
       .onSnapshot(snapshot => {
         const userList: User[] = snapshot.docs.map(doc => doc.data() as User);
         setUsers(userList); 
+        console.log({userList});
+        
       });
 
     return () => unsubscribe(); 
@@ -42,8 +44,8 @@ const UserScreen = () => {
             <Text style={styles.company}>{item.companyName}</Text>
             <Text style={styles.phoneNumber}>{item.phoneNumber}</Text>
 
-            {item.imageUrl ? (
-              <Image source={{ uri: item.imageUrl }} style={styles.profileImage} />
+            {item.photoUri ? (
+              <Image source={{ uri: item.photoUri }} style={styles.profileImage} />
             ) : (
               <Text style={styles.noImageText}>No Image Available</Text>
             )}
