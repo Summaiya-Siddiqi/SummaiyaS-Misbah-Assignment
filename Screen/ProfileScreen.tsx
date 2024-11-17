@@ -5,7 +5,7 @@ import { View, Button, StyleSheet, Text } from 'react-native';
 const ProfileScreen= () => {
   return (
     <View style={styles.container}>
-     <Text></Text>
+     <Text>text</Text>
         </View>
   );
 };

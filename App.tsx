@@ -20,6 +20,7 @@ import AddUserScreen from './Screen/AddUserScreen';
 import LoginScreen from './Screen/LoginScreen';
 import SignupScreen from './Screen/SignupScreen';
 import UserScreen from './Screen/UserScreen';
+import Profile from './Screen/Profile/Profile';
 import '@react-native-firebase/app'; // Import the core Firebase package
 
 // You can also import specific Firebase services like Firestore or Auth if needed
@@ -37,7 +38,7 @@ const App = () => {
     <NavigationContainer>
     <Stack.Navigator>
       <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
-      <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ title: 'Profile' }} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: 'Settings' }} />
       <Stack.Screen name="Userlist" component={UserlistScreen} options={{ title: 'Userlist' }} />
       <Stack.Screen name="Counter" component={ReduxCounter} options={{ title: 'Redux Counter' }} />
@@ -45,6 +46,7 @@ const App = () => {
       <Stack.Screen name="AddUserScreen" component={AddUserScreen} options={{ title: 'AddUser' }} />
       <Stack.Screen name="UserScreen" component={UserScreen} options={{ title: 'User' }} />
       <Stack.Screen name="SignupScreen" component={SignupScreen} options={{ title: 'Signup' }} />
+      <Stack.Screen name="Profile" component={Profile} options={{ title: 'Profile Setting' }} /> 
 
     </Stack.Navigator>
   </NavigationContainer>
