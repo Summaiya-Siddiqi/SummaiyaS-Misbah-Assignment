@@ -1,5 +1,24 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+
+# Debugging and Report for Code
+Below is the Debugging report
+
+### Profile 
+In Profile folder below screens are created:
+First Profile with both Tabs general and password.
+Second GeneralTab where profile data fetch and updated. 
+Third Passwordtab where user password updated.
+The other screens include textfield , button styling for the above two screen.
+
+### Data fetching error handling
+Handle error GeneralTab file data fetching and updating from firestore handle error by adding alert to alert the user and consolelog to log the error.
+
+### Image URI Undefined
+If the photo URI is invalid and empty display image unavailable will be shown.
+
+
+
 # Getting Started
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.

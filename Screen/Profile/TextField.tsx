@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Importing MaterialIcons
 
-const TextField = ({ label, secureTextEntry, keyboardType, iconName,value, onChangeText}) => {
+const TextField = ({ label, iconName,value, onChangeText}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -10,8 +10,6 @@ const TextField = ({ label, secureTextEntry, keyboardType, iconName,value, onCha
         {iconName && <Icon name={iconName} size={20} color="#888" style={styles.icon} />}
         <TextInput
           style={styles.input}
-          secureTextEntry={secureTextEntry}
-          keyboardType={keyboardType}
           value={value}        
           onChangeText={onChangeText} 
         />
