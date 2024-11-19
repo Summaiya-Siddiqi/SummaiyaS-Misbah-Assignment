@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import GeneralTab from './GeneralTab';
+import GeneralTab from './Generaltab/GeneralTab';
 import PasswordTab from './PasswordTab';
 
 const Profile= () => {

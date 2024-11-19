@@ -17,6 +17,29 @@ Handle error GeneralTab file data fetching and updating from firestore handle er
 ### Image URI Undefined
 If the photo URI is invalid and empty display image unavailable will be shown.
 
+### Field Validation and Display Error
+To correct and enhance the validation in both the Profile Tab and Password Tab 
+```bash
+Validation is performed when submitting the form.
+Error messages are displayed next to each input field.
+Password field update is handled correctly, with matching password validation.
+```
+
+### Unit Test Using Jest
+Ran all test suites matching /GeneralTab.test.tsx
+below is the successed test results.
+```bash
+console.log
+    Profile Successfully updated
+      at log (Screen/Profile/Generaltab/GeneralTab.tsx:122:29)
+
+ PASS  Screen/Profile/Generaltab/GeneralTab.test.tsx
+  GeneralTab Component
+    √ should render the form and display user data correctly (492 ms)                                                                        
+    √ should show validation errors for empty fields (39 ms)                                                                                 
+    √ should show email validation error for invalid email (31 ms)                                                                           
+    √ should update the profile when the form is valid (170 ms)        
+```
 
 
 # Getting Started
