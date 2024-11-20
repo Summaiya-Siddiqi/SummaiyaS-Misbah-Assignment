@@ -27,7 +27,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 3. Performance
 4. Warnings or errors
 
-### CREATING DEBUG REPORT
+### DEBUG REPORT
 1. Component are correctly rendering 
 2. Profile image URL is a URL of cache, that may cause failed rendering on other devices
 3. Icons are displayed correctly
