@@ -13,7 +13,7 @@ const TextField = ({ label, iconName, value, onChangeText, error,secureTextEntry
           value={value}
           onChangeText={onChangeText}
           secureTextEntry= {secureTextEntry}
-          accessibilityLabel={accessibilityLabel}        // Optional: Enable secure input for password fields
+          accessibilityLabel={accessibilityLabel}        
         />
       </View>
       {error ? <Text style={styles.errorText}>{error}</Text> : null}

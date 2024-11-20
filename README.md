@@ -25,20 +25,23 @@ Error messages are displayed next to each input field.
 Password field update is handled correctly, with matching password validation.
 ```
 
-### Unit Test Using Jest
+### Unit and UI Test Using Jest
 Ran all test suites matching /GeneralTab.test.tsx
 below is the successed test results.
-```bash
-console.log
-    Profile Successfully updated
-      at log (Screen/Profile/Generaltab/GeneralTab.tsx:122:29)
 
+```bash  
  PASS  Screen/Profile/Generaltab/GeneralTab.test.tsx
   GeneralTab Component
-    √ should render the form and display user data correctly (492 ms)                                                                        
-    √ should show validation errors for empty fields (39 ms)                                                                                 
-    √ should show email validation error for invalid email (31 ms)                                                                           
-    √ should update the profile when the form is valid (170 ms)        
+√ should render the form and display user data correctly
+√ should render the form correctly with labels                                                             
+√ should display validation errors when field are empty           
+√ should show email validation error for invalid email format            
+√ should update the profile when the form is valid                                       
+√ should call firestore update with correct data                                     
+√ should show validation errors for empty fields 
+√ should be accessible and contain labels for all input fields            
+                               
+Tests: 8 passed, 8 total 
 ```
 
 
