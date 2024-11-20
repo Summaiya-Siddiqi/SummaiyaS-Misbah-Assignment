@@ -9,7 +9,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Alert, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './HomeScreen';
+import HomeScreen from './Screen/HomeScreen';
 import ProfileScreen from './Screen/ProfileScreen';
 import SettingsScreen from './Screen/SettingsScreen';
 import UserlistScreen from './Screen/UserlistScreen';
