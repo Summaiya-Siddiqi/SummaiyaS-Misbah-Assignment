@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import Button from './Profile/Button';
 
 interface User {
-  username: string;
+  fullname: string;
   email: string;
-  name: string;
+  
   companyName?: string; 
   phoneNumber?: string;
   latitude?: number;
   longitude?: number;
   photoUri?: string;  // Add image URL for the user profile picture
+  designation?: string;
+  state?: string;
+  city?: string;
+  address?: string;
+  provideservice?: string;
+  zipcode?: string;
+  id?:string
 }
 
-const UserScreen = () => {
+const UserScreen = ({navigation}) => {
   const [users, setUsers] = useState<User[]>([]);
 
   // const unsub = async () =>{
@@ -26,32 +34,59 @@ const UserScreen = () => {
   //     console.log("Userlist "+userList);
   //   });
   // }
-  useEffect(() => {
-    const unsubscribe = firestore()
-      .collection('Users')
+  // useEffect(() => {
+  //   const unsubscribe = firestore()
+  //     .collection('Profile')
       
-      .onSnapshot(snapshot => {
-        const userList: User[] = snapshot.docs.map(doc => doc.data() as User);
+  //     .onSnapshot(snapshot => {
+  //       const userList: User[] = snapshot.docs.map(doc => doc.data() as User);
+  //       setUsers(userList); 
+  //       console.log({userList});
+  //     });
+  //   return () => unsubscribe(); 
+  // }, []);
+  
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      try {
+        const snapshot = await firestore().collection('Profile').get();
+        const userList = snapshot.docs.map(doc => ({
+          id: doc.id, // Firebase document ID
+          ...doc.data(), // Profile data
+        }));
         setUsers(userList); 
-        console.log("Userlist "+userList);
-      });
-    return () => unsubscribe(); 
+      } catch (error) {
+        console.error('Error fetching profiles:', error);
+        Alert.alert('Error', 'Failed to fetch profiles from Firestore.');
+      }
+    };
+
+    fetchProfiles();
   }, []);
+  const handleProfileClick = (profileId, profileName) => {
+    Alert.alert('Profile Selected', `Profile ID: ${profileId}\nName: ${profileName}`);
+    console.log('Profile ID:', profileId); // Use this for further actions
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Existing Users</Text>
+      <Text style={styles.title} >Existing Users</Text>
 
-      <FlatList
+      <FlatList 
         data={users}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <View style={styles.userCard}>
-            <Text style={styles.username}>{item.username}</Text>
+          <View style={styles.userCard} >
+            <Text style={styles.fullname} >{item.fullname}</Text>
             <Text style={styles.email}>{item.email}</Text>
-            <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.company}>{item.companyName}</Text>
             <Text style={styles.phoneNumber}>{item.phoneNumber}</Text>
+            <Text style={styles.phoneNumber}>{item.address}</Text>
+            <Text style={styles.phoneNumber}>{item.city}</Text>
+            <Text style={styles.phoneNumber}>{item.zipcode}</Text>
+            <Text style={styles.phoneNumber}>{item.designation}</Text>
+            <Text style={styles.phoneNumber}>{item.state}</Text>
+            <Text style={styles.phoneNumber}>{item.provideservice}</Text>
 
             {item.photoUri ? (
               <Image source={{ uri: item.photoUri }} style={styles.profileImage} />
@@ -67,6 +102,7 @@ const UserScreen = () => {
             ) : (
               <Text style={styles.noLocationText}>Location not available</Text>
             )}
+            <Button   onPress={() => handleProfileClick(item.id)} text={"Edit User"}></Button>
           </View>
         )}
       />
@@ -98,7 +134,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 2 },
   },
-  username: {
+  fullname: {
     fontSize: 18,
     fontWeight: '600',
     color: '#2C3E50',

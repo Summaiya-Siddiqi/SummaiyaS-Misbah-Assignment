@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet, ScrollView, Text, Image } from 'react-native';
+import { View, TextInput, Button, Alert, StyleSheet, ScrollView, Text, Image, PermissionsAndroid } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
@@ -10,6 +10,12 @@ import RNFS from 'react-native-fs';
 const AddUserScreen = ({ navigation }: { navigation: any }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [Designation, setDesignation] = useState('');
+    const [Address, setAddress] = useState('');
+    const [City, setCity] = useState('');
+    const [State, setState] = useState('');
+    const [ZipCode, setZipCode] = useState('');
+    const [Services, setServices] = useState('');
     const [name, setName] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -42,18 +48,28 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
         requestNotificationPermission();
         getFCMToken();
 
+        
+
         // Get location
-        const getLocation = () => {
-            Geolocation.getCurrentPosition(
-                (position) => {
-                    setLocation(position.coords);
-                },
-                (error) => {
-                    console.error('Location error', error);
-                    Alert.alert('Error', 'Failed to get location. Please check permissions.');
-                },
-                { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-            );
+        const getLocation =async () => {
+            const hasPermission =await  PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+
+            if (hasPermission) {
+                console.log('Permission already granted');
+                Geolocation.getCurrentPosition(
+                    (position) => {
+                        setLocation(position.coords);
+                    },
+                    (error) => {
+                        console.error('Location error', error);
+                        Alert.alert('Error', 'Failed to get location. Please check permissions.');
+                    },
+                    { enableHighAccuracy: true, timeout: 30000, maximumAge: 1000 }
+                );
+              } else {
+                console.log('Permission not granted');
+              }
+            
         };
         getLocation();
 
@@ -134,15 +150,21 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
 
         try {
             // Store the user data in Firestore
-            await firestore().collection('Users').add({
+            await firestore().collection('Profile').add({
                 username,
                 email,
                 name,
                 companyName: companyName || '',
                 phoneNumber: phoneNumber || '',
-                latitude: location.latitude || '',
-                longitude: location.longitude || '',
+                latitude: location?.latitude || '',
+                longitude: location?.longitude || '',
                 photoUri: photo,
+                designation: Designation,
+                state: State,
+                city: City,
+                zipcode: ZipCode,
+                provideservice: Services,
+                address: Address,
             });
 
             Alert.alert('Success', 'User added successfully');
@@ -153,6 +175,12 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
             setPhoneNumber('');
             setLocation(null);
             setPhoto(filePath);
+            setDesignation(Designation);
+            setState(State);
+            setCity(City);
+            setZipCode(ZipCode);
+            setServices(Services);
+            setAddress(Address);
             //setPhotoBase64(photoBase64);
         } catch (error: any) {
             Alert.alert('Error', error.message);
@@ -204,6 +232,48 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
                 keyboardType="phone-pad"
                 style={styles.input}
             />
+            <TextInput
+                placeholder="Addresss "
+                placeholderTextColor="#888"
+                value={Address}
+                onChangeText={setAddress}
+                style={styles.input}
+            />
+            <TextInput
+                placeholder="City"
+                placeholderTextColor="#888"
+                value={City}
+                onChangeText={setCity}
+                style={styles.input}
+            />
+            <TextInput
+                placeholder="State"
+                placeholderTextColor="#888"
+                value={State}
+                onChangeText={setState}
+                style={styles.input}
+            />
+            <TextInput
+                placeholder="Provide Services"
+                placeholderTextColor="#888"
+                value={Services}
+                onChangeText={setServices}
+                style={styles.input}
+            />
+            <TextInput
+                placeholder="Zip Code"
+                placeholderTextColor="#888"
+                value={ZipCode}
+                onChangeText={setZipCode}
+                style={styles.input}
+            />
+            <TextInput
+                placeholder="Designation"
+                placeholderTextColor="#888"
+                value={Designation}
+                onChangeText={setDesignation}
+                style={styles.input}
+            />
 
             <View style={styles.container}>
                 {/* Camera component */}
@@ -216,8 +286,6 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
                 />
 
                 <Button title="Capture Image" onPress={captureImage} />
-
-
                 {photo && (
                     <Image
                         source={{ uri: photo }}
@@ -232,14 +300,14 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
             </View>
 
             {/* Display Location Data */}
-            {/*location ? (
+            {location ? (
                 <View style={styles.locationContainer}>
-                    <Text style={styles.locationText}>Latitude: {location.latitude}</Text>
-                    <Text style={styles.locationText}>Longitude: {location.longitude}</Text>
+                    <Text style={styles.locationText}>`Latitude: ${location?.latitude}`</Text>
+                    <Text style={styles.locationText}>`Longitude: ${location?.longitude}`</Text>
                 </View>
             ) : (
                 <Text style={styles.locationText}>Location not available</Text>
-            )*/}
+            )}
 
             <View style={styles.navigationContainer}>
                 <Button

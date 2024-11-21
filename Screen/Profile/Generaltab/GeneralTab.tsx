@@ -3,13 +3,15 @@ import { View, StyleSheet, Image, Text, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import TextField from '../TextField';
 import Button from '../Button';
+import auth from '@react-native-firebase/auth';
+import { useRoute } from '@react-navigation/native';
 
 const GeneralTab = () => {
     const [userData, setUserData] = useState({
-        fullname: '',
+        username: '',
         designation: '',
         email: '',
-        phoneno: '',
+        phoneNumber: '',
         address: '',
         city: '',
         state: '',
@@ -19,51 +21,122 @@ const GeneralTab = () => {
     });
 
     const [errors, setErrors] = useState({
-        fullname: '',
+        username: '',
         email: '',
-        phoneno: '',
+        phoneNumber: '',
         zipcode: ''
     });
-
-    const userId = 'Summaiya';
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const route = useRoute();
+    const [user, setUser] = useState(null);
+    
+    const { email } = route.params;  // Extract the email from the route parameters
 
     useEffect(() => {
-        const reference = firestore().collection('Profile').doc(userId);
+      const fetchUserDetails = async () => {
+        try {
+          const userDoc = await firestore().collection('users').doc(email).get();
+          if (userDoc.exists) {
+            setUser(userDoc.data());  // Set the user data
+          } else {
+            console.log('User not found');
+          }
+        } catch (error) {
+          console.error('Error fetching user details:', error);
+        } finally {
+          setLoading(false);
+        }
+      }})
+    // useEffect(() => {
+    //     // Get the current logged-in user
+    // //     const currentUser = auth().currentUser;
+    // // console.log({currentUser});
+    // // console.log({currentUser:currentUser?.uid});
+    
+    // //     if (!currentUser) {
+    // //       Alert.alert("Not Logged In", "Please log in to view your profile.");
+    // //       //setLoading(false);
+    // //       return;
+    // //     }
+    
+    //     const userId = currentUser.uid;
+    
+    //     // Fetch user profile from Firestore
+    //     const reference = firestore().collection('Profile').doc(userId);
+    
+    //     reference
+    //       .get()
+    //       .then(snapshot => {
+    //         if (snapshot.exists) {
+    //           const data = snapshot.data();
+    //           setUserData({
+    //             username: data?.username || '',
+    //             designation: data?.designation || '',
+    //             email: data?.email || '',
+    //             phoneNumber: data?.phoneNumber || '',
+    //             address: data?.address || '',
+    //             city: data?.city || '',
+    //             state: data?.state || '',
+    //             zipcode: data?.zipcode || '',
+    //             provideservice: data?.provideservice || '',
+    //             photouri: data?.photouri || '',
+    //           });
+    //         } else {
+    //           Alert.alert("User Not Found", "No profile data available for this user.");
+    //         }
+    //       })
+    //       .catch(error => {
+    //         console.error("Error fetching data: ", error);
+    //         Alert.alert("Error", "There was an error fetching your profile data.");
+    //       })
+    //       .finally(() => {
+    //         //setLoading(false);
+    //       });
+    //   }, []);
 
-        reference
-            .get()
-            .then(snapshot => {
-                if (snapshot.exists) {
-                    const data = snapshot.data();
-                    setUserData({
-                        fullname: data?.fullname || '',
-                        designation: data?.designation || '',
-                        email: data?.email || '',
-                        phoneno: data?.phoneno || '',
-                        address: data?.address || '',
-                        city: data?.city || '',
-                        state: data?.state || '',
-                        zipcode: data?.zipcode || '',
-                        provideservice: data?.provideservice || '',
-                        photouri: data?.photouri
-                    });
-                } else {
-                    console.log("User not found");
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching data: ", error);
-                Alert.alert("Error", "There was an error fetching your profile data.");
-            });
-    }, []);
+    // const userId = 'NnqdWLZou7ASfkjGk3UG';
+
+    // useEffect(() => {
+    //     const reference = firestore().collection('Profile').doc(userId);
+
+    //     reference
+    //         .get()
+    //         .then(snapshot => {
+    //             if (snapshot.exists) {
+    //                 const data = snapshot.data();
+    //                 console.log({data});
+                    
+    //                 setUserData({
+    //                     username: data?.username || '',
+    //                     designation: data?.designation || '',
+    //                     email: data?.email || '',
+    //                     phoneNumber: data?.phoneNumber || '',
+    //                     address: data?.address || '',
+    //                     city: data?.city || '',
+    //                     state: data?.state || '',
+    //                     zipcode: data?.zipcode || '',
+    //                     provideservice: data?.provideservice || '',
+    //                     photouri: data?.photouri,
+                        
+    //                 });
+    //             } else {
+    //                 console.log("User not found");
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error("Error fetching data: ", error);
+    //             Alert.alert("Error", "There was an error fetching your profile data.");
+    //         });
+    // }, []);
 
     const validateForm = () => {
         const validationErrors: any = {};
         let isValid = true;
 
         // Validate Full Name
-        if (!userData.fullname.trim()) {
-            validationErrors.fullname = 'Full Name is required';
+        if (!userData.username.trim()) {
+            validationErrors.username = 'Full Name is required';
             isValid = false;
         }
 
@@ -79,11 +152,11 @@ const GeneralTab = () => {
 
         // Validate Phone Number
         const phoneRegex = /^[0-9]{11}$/;
-        if (!userData.phoneno.trim()) {
-            validationErrors.phoneno = 'Phone number is required';
+        if (!userData.phoneNumber.trim()) {
+            validationErrors.phoneNumber = 'Phone number is required';
             isValid = false;
-        } else if (!phoneRegex.test(userData.phoneno)) {
-            validationErrors.phoneno = 'Please enter a valid 10-digit phone number';
+        } else if (!phoneRegex.test(userData.phoneNumber)) {
+            validationErrors.phoneNumber = 'Please enter a valid 10-digit phone number';
             isValid = false;
         }
 
@@ -107,10 +180,10 @@ const GeneralTab = () => {
 
             reference
                 .update({
-                    fullname: userData.fullname,
+                    username: userData.username,
                     designation: userData.designation,
                     email: userData.email,
-                    phoneno: userData.phoneno,
+                    phoneNumber: userData.phoneNumber,
                     address: userData.address,
                     city: userData.city,
                     state: userData.state,
@@ -147,7 +220,7 @@ const GeneralTab = () => {
                         <Text style={styles.imageUnavailableText}>Image Unavailable</Text>
                     )}
                 </View>
-                <Text style={styles.profileName}>{userData.fullname}</Text>
+                <Text style={styles.profileName}>{userData.username}</Text>
                 <View style={styles.container}>
                     <Text style={styles.aboutlabel}>About</Text>
                     <Text style={styles.text}>Lorem ipsum is simply dummy text of the printing and typesetting...</Text>
@@ -157,9 +230,9 @@ const GeneralTab = () => {
             <TextField
                 label="Full Name"
                 iconName="person"
-                value={userData.fullname}
-                onChangeText={(text: string) => handleInputChange('fullname', text)}
-                error={errors.fullname}
+                value={userData.username}
+                onChangeText={(text: string) => handleInputChange('username', text)}
+                error={errors.username}
                 secureTextEntry={false}
                 accessibilityLabel="Full Name"  // Correctly adding the accessibilityLabel
             />
@@ -187,9 +260,9 @@ const GeneralTab = () => {
             <TextField
                 label="Phone No."
                 iconName="phone"
-                value={userData.phoneno}
-                onChangeText={(text: string) => handleInputChange('phoneno', text)}
-                error={errors.phoneno}
+                value={userData.phoneNumber}
+                onChangeText={(text: string) => handleInputChange('phoneNumber', text)}
+                error={errors.phoneNumber}
                 secureTextEntry={false}
                 accessibilityLabel="Phone No."  // Add accessibilityLabel for Phone No.
             />
