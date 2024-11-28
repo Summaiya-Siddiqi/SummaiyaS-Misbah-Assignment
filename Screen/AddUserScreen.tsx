@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet, ScrollView, Text, Image, PermissionsAndroid } from 'react-native';
+import { View, TextInput, Button, Alert, StyleSheet, ScrollView, Text, Image, PermissionsAndroid, TouchableOpacity, SafeAreaView } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
@@ -189,188 +189,164 @@ const AddUserScreen = ({ navigation }: { navigation: any }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Add New User</Text>
+          <Text style={styles.title}>Add New User</Text>
+      
+          {/* Form Fields */}
+          <Text style={styles.sectionTitle}>User Information</Text>
+          <TextInput placeholder="Username" placeholderTextColor="#888" value={username} onChangeText={setUsername} style={styles.input} />
+          <TextInput placeholder="Email" placeholderTextColor="#888" value={email} onChangeText={setEmail} keyboardType="email-address" style={styles.input} />
+          <TextInput placeholder="Name" placeholderTextColor="#888" value={name} onChangeText={setName} style={styles.input} />
+      
+          <TextInput placeholder="Company Name" placeholderTextColor="#888" value={companyName} onChangeText={setCompanyName} style={styles.input} />
+          <TextInput placeholder="Phone Number" placeholderTextColor="#888" value={phoneNumber} onChangeText={setPhoneNumber} keyboardType="phone-pad" style={styles.input} />
+      
+          {/* Address Details */}
+          <Text style={styles.sectionTitle}>Address Details</Text>
+          <TextInput placeholder="Address" placeholderTextColor="#888" value={Address} onChangeText={setAddress} style={styles.input} />
+          <TextInput placeholder="City" placeholderTextColor="#888" value={City} onChangeText={setCity} style={styles.input} />
+          <TextInput placeholder="State" placeholderTextColor="#888" value={State} onChangeText={setState} style={styles.input} />
+          <TextInput placeholder="Zip Code" placeholderTextColor="#888" value={ZipCode} onChangeText={setZipCode} style={styles.input} />
+          <TextInput placeholder="Designation" placeholderTextColor="#888" value={Designation} onChangeText={setDesignation} style={styles.input} />
+      
+          {/* Camera Capture */}
+          <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Add New User</Text>
 
-            <TextInput
-                placeholder="Username"
-                placeholderTextColor="#888"
-                value={username}
-                onChangeText={setUsername}
-                style={styles.input}
-            />
+      <View style={styles.cameraContainer}>
+        {/* Camera Preview */}
+        <Camera
+          ref={cameraRef}
+          style={StyleSheet.absoluteFill}
+          device={device}
+          isActive={true}
+          photo={true}
+        />
+      </View>
 
-            <TextInput
-                placeholder="Email"
-                placeholderTextColor="#888"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                style={styles.input}
-            />
+      <Button title="Capture Image" onPress={captureImage} color="#3B82F6" />
 
-            <TextInput
-                placeholder="Name"
-                placeholderTextColor="#888"
-                value={name}
-                onChangeText={setName}
-                style={styles.input}
-            />
-
-            <TextInput
-                placeholder="Company Name (optional)"
-                placeholderTextColor="#888"
-                value={companyName}
-                onChangeText={setCompanyName}
-                style={styles.input}
-            />
-
-            <TextInput
-                placeholder="Phone Number (optional)"
-                placeholderTextColor="#888"
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                keyboardType="phone-pad"
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Addresss "
-                placeholderTextColor="#888"
-                value={Address}
-                onChangeText={setAddress}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="City"
-                placeholderTextColor="#888"
-                value={City}
-                onChangeText={setCity}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="State"
-                placeholderTextColor="#888"
-                value={State}
-                onChangeText={setState}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Provide Services"
-                placeholderTextColor="#888"
-                value={Services}
-                onChangeText={setServices}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Zip Code"
-                placeholderTextColor="#888"
-                value={ZipCode}
-                onChangeText={setZipCode}
-                style={styles.input}
-            />
-            <TextInput
-                placeholder="Designation"
-                placeholderTextColor="#888"
-                value={Designation}
-                onChangeText={setDesignation}
-                style={styles.input}
-            />
-
-            <View style={styles.container}>
-                {/* Camera component */}
-                <Camera
-                    ref={cameraRef}
-                    style={StyleSheet.absoluteFillObject}
-                    device={device}
-                    isActive={true}
-                    photo={true}
-                />
-
-                <Button title="Capture Image" onPress={captureImage} />
-                {photo && (
-                    <Image
-                        source={{ uri: photo }}
-                        style={{ width: 200, height: 200, marginTop: 10 }}
-                    />
-
-                )}
-            </View>
-
-            <View style={styles.navigationContainer}>
-                <Button title="Add User" onPress={handleAddUser} color="#4CAF50" />
-            </View>
-
-            {/* Display Location Data */}
+      {photo && (
+        <Image
+          source={{ uri: photo }}
+          style={styles.capturedImage}
+        />
+      )}
+    </SafeAreaView>
+          {/* Action Buttons */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.buttonStyle} onPress={handleAddUser}>
+              <Text style={styles.buttonText}>Add User</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonStyle, { backgroundColor: '#2196F3' }]} onPress={() => navigation.navigate('UserScreen')}>
+              <Text style={styles.buttonText}>Go to Existing Users</Text>
+            </TouchableOpacity>
+          </View>
+      
+          {/* Sign Out */}
+          <TouchableOpacity style={[styles.buttonStyle, styles.signOutButton]} onPress={handleSignOut}>
+            <Text style={styles.buttonText}>Sign Out</Text>
+          </TouchableOpacity>
+      
+          {/* Location Display */}
+          <View style={styles.locationContainer}>
             {location ? (
-                <View style={styles.locationContainer}>
-                    <Text style={styles.locationText}>`Latitude: ${location?.latitude}`</Text>
-                    <Text style={styles.locationText}>`Longitude: ${location?.longitude}`</Text>
-                </View>
+              <>
+                <Text style={styles.locationText}>Latitude: {location.latitude}</Text>
+                <Text style={styles.locationText}>Longitude: {location.longitude}</Text>
+              </>
             ) : (
-                <Text style={styles.locationText}>Location not available</Text>
+              <Text style={styles.locationText}>Location not available</Text>
             )}
-
-            <View style={styles.navigationContainer}>
-                <Button
-                    title="Go to Existing Users"
-                    onPress={() => navigation.navigate('UserScreen')}
-                    color="#2196F3"
-                />
-            </View>
-
-            <View style={styles.signOutContainer}>
-                <Button title="Sign Out" onPress={handleSignOut} color="" />
-            </View>
+          </View>
         </ScrollView>
-    );
+      );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#89c7d9',
+      flex: 1,
+      padding: 20,
+      backgroundColor: '#F0F4F8', // Light background color for better contrast
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-        color: '#333',
+      fontSize: 28,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginBottom: 25,
+      color: '#333',
     },
     input: {
-        height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 5,
-        marginBottom: 15,
-        paddingLeft: 10,
-        backgroundColor: '#fff',
-        fontSize: 16,
-        color: 'black',
+      height: 50,
+      borderColor: '#D1D5DB',
+      borderWidth: 1,
+      borderRadius: 8,
+      marginBottom: 15,
+      paddingLeft: 12,
+      backgroundColor: '#FFFFFF',
+      fontSize: 16,
+      color: '#333',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+    sectionTitle: {
+      fontSize: 20,
+      fontWeight: '600',
+      color: '#444',
+      marginVertical: 10,
+      textAlign: 'left',
+    },
+    buttonContainer: {
+      marginTop: 20,
+      borderRadius: 8,
+      overflow: 'hidden',
+    },
+    buttonStyle: {
+      backgroundColor: '#3B82F6',
+      paddingVertical: 12,
+      borderRadius: 8,
+      alignItems: 'center',
+      marginVertical: 8,
+    },
+    buttonText: {
+      color: '#FFF',
+      fontSize: 18,
+      fontWeight: '600',
+    },
+    cameraContainer: {
+      marginVertical: 20,
+      alignItems: 'center',
+      height: 250,
+      borderRadius: 10,
+      //overflow: 'hidden',
+      backgroundColor: '#000',
     },
     capturedImage: {
-        width: 300,
-        height: 400,
-        marginTop: 20,
-        borderRadius: 10,
+      width: 200,
+      height: 200,
+      borderRadius: 10,
+      marginTop: 15,
     },
     locationContainer: {
-        marginTop: 20,
-        backgroundColor: '#f0f0f0',
-        padding: 10,
-        borderRadius: 5,
+      marginTop: 20,
+      padding: 12,
+      backgroundColor: '#E2E8F0',
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 5,
     },
     locationText: {
-        fontSize: 16,
-        color: '#333',
-        marginBottom: 5,
+      fontSize: 16,
+      color: '#555',
+      textAlign: 'center',
     },
-    navigationContainer: {
-        marginTop: 20,
+    signOutButton: {
+      backgroundColor: '#EF4444',
+      marginVertical: 15,
     },
-    signOutContainer: {
-        marginTop: 20,
-    },
-});
-
+  });
 export default AddUserScreen;

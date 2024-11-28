@@ -1,60 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, Alert } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Button from './Profile/Button';
 
 interface User {
-  fullname: string;
+  name: string;
   email: string;
-  
-  companyName?: string; 
+  companyName?: string;
   phoneNumber?: string;
   latitude?: number;
   longitude?: number;
-  photoUri?: string;  // Add image URL for the user profile picture
+  photoUri?: string;
   designation?: string;
   state?: string;
   city?: string;
   address?: string;
   provideservice?: string;
   zipcode?: string;
-  id?:string
+  id?: string;
 }
 
-const UserScreen = ({navigation}) => {
+const UserScreen = ({ navigation }) => {
   const [users, setUsers] = useState<User[]>([]);
 
-  // const unsub = async () =>{
-  //   await firestore()
-  //   .collection('Users')
-    
-  //   .onSnapshot(snapshot => {
-  //     const userList: User[] = snapshot.docs.map(doc => doc.data() as User);
-  //     setUsers(userList); 
-  //     console.log("Userlist "+userList);
-  //   });
-  // }
-  // useEffect(() => {
-  //   const unsubscribe = firestore()
-  //     .collection('Profile')
-      
-  //     .onSnapshot(snapshot => {
-  //       const userList: User[] = snapshot.docs.map(doc => doc.data() as User);
-  //       setUsers(userList); 
-  //       console.log({userList});
-  //     });
-  //   return () => unsubscribe(); 
-  // }, []);
-  
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
         const snapshot = await firestore().collection('Profile').get();
         const userList = snapshot.docs.map(doc => ({
-          id: doc.id, // Firebase document ID
-          ...doc.data(), // Profile data
+          id: doc.id,
+          ...doc.data(),
         }));
-        setUsers(userList); 
+        setUsers(userList);
+        console.log('===>',{userList});
+        
       } catch (error) {
         console.error('Error fetching profiles:', error);
         Alert.alert('Error', 'Failed to fetch profiles from Firestore.');
@@ -63,49 +42,66 @@ const UserScreen = ({navigation}) => {
 
     fetchProfiles();
   }, []);
+
   const handleProfileClick = (profileId) => {
-    navigation.navigate('Profile',{ profileId: profileId });  
-    Alert.alert('Profile Selected', `Profile ID: ${profileId}`);
-    //console.log({});
-    
-    console.log('Profile ID:', profileId); // Use this for further actions
+    navigation.navigate('Profile', { profileId });
+    console.log('Profile ID:', profileId);
+  };
+  const handleDeleteUser = (userId: string) => {
+    Alert.alert(
+      'Confirm Delete',
+      'Are you sure you want to delete this user?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await firestore().collection('Profile').doc(userId).delete();
+              setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+              Alert.alert('Success', 'User deleted successfully.');
+            } catch (error) {
+              console.error('Error deleting user:', error);
+              Alert.alert('Error', 'Failed to delete user.');
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title} >Existing Users</Text>
-
-      <FlatList 
+      <Text style={styles.title}>Existing Users</Text>
+      <FlatList
         data={users}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.userCard} >
-            <Text style={styles.fullname} >{item.fullname}</Text>
-            <Text style={styles.email}>{item.email}</Text>
-            <Text style={styles.company}>{item.companyName}</Text>
-            <Text style={styles.phoneNumber}>{item.phoneNumber}</Text>
-            <Text style={styles.phoneNumber}>{item.address}</Text>
-            <Text style={styles.phoneNumber}>{item.city}</Text>
-            <Text style={styles.phoneNumber}>{item.zipcode}</Text>
-            <Text style={styles.phoneNumber}>{item.designation}</Text>
-            <Text style={styles.phoneNumber}>{item.state}</Text>
-            <Text style={styles.phoneNumber}>{item.provideservice}</Text>
-
+          <View style={styles.userCard}>
             {item.photoUri ? (
               <Image source={{ uri: item.photoUri }} style={styles.profileImage} />
             ) : (
               <Text style={styles.noImageText}>No Image Available</Text>
             )}
-
-            {item.latitude && item.longitude ? (
-              <View style={styles.locationContainer}>
-                <Text style={styles.locationText}>Latitude: {item.latitude}</Text>
-                <Text style={styles.locationText}>Longitude: {item.longitude}</Text>
-              </View>
-            ) : (
-              <Text style={styles.noLocationText}>Location not available</Text>
-            )}
-            <Button   onPress={() => handleProfileClick(item.id)} text={"Edit User"}></Button>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.infoText}>{item.email}</Text>
+            {item.companyName && <Text style={styles.infoText}>Company: {item.companyName}</Text>}
+            {item.phoneNumber && <Text style={styles.infoText}>Phone: {item.phoneNumber}</Text>}
+            {item.address && <Text style={styles.infoText}>Address: {item.address}</Text>}
+            <Text style={styles.infoText}>City: {item.city || 'N/A'}</Text>
+            <Text style={styles.infoText}>State: {item.state || 'N/A'}</Text>
+            <Text style={styles.infoText}>Zip Code: {item.zipcode || 'N/A'}</Text>
+            <Text style={styles.infoText}>Service: {item.provideservice || 'N/A'}</Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={() => handleProfileClick(item.id)} style={styles.editButton}>
+                <Text style={styles.buttonText}>Edit User</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleDeleteUser(item.id)} style={styles.deleteButton}>
+                <Text style={styles.buttonText}>Delete User</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
@@ -113,12 +109,11 @@ const UserScreen = ({navigation}) => {
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#89c7d9',
+    backgroundColor: '#F5F5F5',
   },
   title: {
     fontSize: 28,
@@ -128,69 +123,57 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   userCard: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 15,
-    marginBottom: 15,
-    elevation: 5, 
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 20,
+    marginVertical: 10,
+    elevation: 5,
+    shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowRadius: 10,
     shadowOffset: { width: 0, height: 2 },
-  },
-  fullname: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2C3E50',
-  },
-  email: {
-    fontSize: 16,
-    color: '#34495e',
-    marginTop: 5,
-  },
-  name: {
-    fontSize: 16,
-    color: '#34495e',
-    marginTop: 5,
-  },
-  company: {
-    fontSize: 14,
-    color: '#011936',
-    marginTop: 5,
-  },
-  phoneNumber: {
-    fontSize: 14,
-    color: '#1446A0',
-    marginTop: 5,
+    shadowRadius: 6,
   },
   profileImage: {
-    width: 300,
-    height: 200,
-    borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     alignSelf: 'center',
+    marginBottom: 15,
   },
-  noImageText: {
+  name: {
+    fontSize: 20,
+    fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-  },
-  locationContainer: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 5,
-  },
-  locationText: {
-    fontSize: 14,
     color: '#333',
+    marginBottom: 5,
   },
-  noLocationText: {
-    textAlign: 'center',
+  infoText: {
     fontSize: 14,
-    color: '#888',
-    marginTop: 5,
+    color: '#555',
+    marginBottom: 3,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  editButton: {
+    backgroundColor: '#3B82F6',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });
 
