@@ -63,8 +63,11 @@ const UserScreen = ({navigation}) => {
 
     fetchProfiles();
   }, []);
-  const handleProfileClick = (profileId, profileName) => {
-    Alert.alert('Profile Selected', `Profile ID: ${profileId}\nName: ${profileName}`);
+  const handleProfileClick = (profileId) => {
+    navigation.navigate('Profile',{ profileId: profileId });  
+    Alert.alert('Profile Selected', `Profile ID: ${profileId}`);
+    //console.log({});
+    
     console.log('Profile ID:', profileId); // Use this for further actions
   };
 

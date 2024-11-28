@@ -5,20 +5,20 @@ import { Button, View, StyleSheet } from 'react-native';
 const HomeScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.buttonContainer}>
+      {/* <View style={styles.buttonContainer}>
         <Button
           title="Profile"
           color="#9987d9"
           onPress={() => navigation.navigate('Profile')}
         />
-      </View>
-      <View style={styles.buttonContainer}>
+      </View> */}
+      {/* <View style={styles.buttonContainer}>
         <Button
           title="Settings"
           color="#9987d9"
           onPress={() => navigation.navigate('Settings')}
         />
-      </View>
+      </View> */}
       <View style={styles.buttonContainer}>
         <Button
           title="Userlist"
